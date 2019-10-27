@@ -1,7 +1,7 @@
 /*
  * tio - a simple TTY terminal I/O application
  *
- * Copyright (c) 2014-2017  Martin Lund
+ * Copyright (c) 2014-2016  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,9 +41,6 @@ int main(int argc, char *argv[])
 
     /* Configure tty device */
     tty_configure();
-
-    /* Configure input terminal */
-    stdin_configure();
 
     /* Configure output terminal */
     stdout_configure();

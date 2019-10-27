@@ -1,5 +1,5 @@
 AC_PREREQ([2.68])
-AC_INIT([tio], [1.32], [], [tio], [https://tio.github.io])
+AC_INIT([tio], [1.20], [], [tio], [https://tio.github.io])
 AC_CONFIG_HEADERS([src/include/config.h])
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz no-dist-gzip -Wall -Werror])
 AM_SILENT_RULES([yes])
@@ -7,6 +7,7 @@ AC_PROG_CC
 AC_LANG([C])
 AC_PROG_INSTALL
 AC_SYS_LARGEFILE
+PKG_PROG_PKG_CONFIG
 
 # Handle bash completion
 AC_ARG_WITH([bash-completion-dir],
@@ -16,7 +17,9 @@ AC_ARG_WITH([bash-completion-dir],
                    [with_bash_completion_dir=yes])
 
 if test "x$with_bash_completion_dir" = "xyes"; then
-    BASH_COMPLETION_DIR="${datadir}/bash-completion/completions"
+    PKG_CHECK_MODULES([BASH_COMPLETION], [bash-completion >= 2.0],
+        [BASH_COMPLETION_DIR="`pkg-config --variable=completionsdir bash-completion`"],
+        [BASH_COMPLETION_DIR="${sysconfdir}/bash_completion.d"])
 else
     BASH_COMPLETION_DIR="$with_bash_completion_dir"
 fi
@@ -83,10 +86,6 @@ TIO_CHECK_BAUDRATES(
 )
 
 AC_DEFINE_UNQUOTED([AUTOCONF_BAUDRATE_CASES],[$BAUDRATE_CASES],[Switch cases for detected baud rates])
-
-# Check for interface for setting arbitrary I/O speeds
-AC_CHECK_DECL([TCGETS2], [AC_DEFINE([HAVE_TERMIOS2],[1],[Define if termios2 exists.]) have_termios2=yes], , [[#include <asm/termios.h>]])
-AM_CONDITIONAL([ADD_SETSPEED2],[test "x$have_termios2" == "xyes"])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([src/Makefile])

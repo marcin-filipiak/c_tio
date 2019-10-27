@@ -1,0 +1,58 @@
+[DEBREATE-0.7.13]
+<<CTRL>>
+Package: tio
+Version: 1.20-R
+Maintainer: Martin Lund, revised by Marcin Filipiak <m.filipiak@noweenergie.org>
+Homepage: http://noweenergie.org
+Architecture: i386
+Priority: optional
+Description: simple TTY terminal
+
+<</CTRL>>
+<<FILES>>
+1
+/home/kolgreen/Dropbox/Projekty/programowanie/c++/tio/src/tio* -> tio -> /usr/bin
+<</FILES>>
+<<SCRIPTS>>
+<<PREINST>>
+0
+<</PREINST>>
+<<POSTINST>>
+0
+<</POSTINST>>
+<<PRERM>>
+0
+<</PRERM>>
+<<POSTRM>>
+0
+<</POSTRM>>
+<</SCRIPTS>>
+<<CHANGELOG>>
+<<DEST>>DEFAULT<</DEST>>
+
+<</CHANGELOG>>
+<<COPYRIGHT>>
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ 02110-1301, USA.
+<</COPYRIGHT>>
+<<MENU>>
+0
+<</MENU>>
+<<BUILD>>
+1
+1
+0
+strip
+<</BUILD>>

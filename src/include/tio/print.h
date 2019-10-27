@@ -1,7 +1,7 @@
 /*
  * tio - a simple TTY terminal I/O application
  *
- * Copyright (c) 2014-2017  Martin Lund
+ * Copyright (c) 2014-2016  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,16 +33,12 @@
 #define ANSI_COLOR_RESET     "\x1b[0m"
 
 #define color_printf(format, args...) \
-   { \
-     fprintf (stdout, "\r" ANSI_COLOR_YELLOW format ANSI_COLOR_RESET "\r\n", ## args); \
-     fflush(stdout); \
-   }
+   fprintf (stdout, "\r" ANSI_COLOR_YELLOW format ANSI_COLOR_RESET "\r\n", ## args); \
+   fflush(stdout);
 
 #define warning_printf(format, args...) \
-   { \
-     fprintf (stdout, "\rWarning: " format "\r\n", ## args); \
-     fflush(stdout); \
-   }
+   fprintf (stdout, "\rWarning: " format "\r\n", ## args); \
+   fflush(stdout);
 
 #ifdef DEBUG
 #define debug_printf(format, args...) \

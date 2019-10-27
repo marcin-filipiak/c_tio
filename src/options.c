@@ -1,7 +1,8 @@
 /*
  * tio - a simple TTY terminal I/O application
  *
- * Copyright (c) 2014-2018  Martin Lund
+ * Copyright (c) 2014-2016  Martin Lund
+ * Revised by Marcin Filipiak
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <errno.h>
 #include <getopt.h>
 #include <termios.h>
@@ -37,6 +37,7 @@
 struct option_t option =
 {
     "",       // Device name
+    "no",     // Endline
     115200,   // Baudrate
     8,        // Databits
     "none",   // Flow
@@ -45,17 +46,15 @@ struct option_t option =
     0,        // No output delay
     false,    // No autoconnect
     false,    // No log
-    false,    // No local echo
-    false,    // No timestamp
-    "",       // Log filename
-    ""        // Map string
+    ""        // Log filename
 };
 
 void print_help(char *argv[])
 {
-    printf("Usage: %s [<options>] <tty-device>\n", argv[0]);
+    printf("Usage: %s [<options>] <tty device>\n", argv[0]);
     printf("\n");
     printf("Options:\n");
+    printf("  -e, --endline yes|no        Send with end line (default: no)\n");
     printf("  -b, --baudrate <bps>        Baud rate (default: 115200)\n");
     printf("  -d, --databits 5|6|7|8      Data bits (default: 8)\n");
     printf("  -f, --flow hard|soft|none   Flow control (default: none)\n");
@@ -63,14 +62,9 @@ void print_help(char *argv[])
     printf("  -p, --parity odd|even|none  Parity (default: none)\n");
     printf("  -o, --output-delay <ms>     Output delay (default: 0)\n");
     printf("  -n, --no-autoconnect        Disable automatic connect\n");
-    printf("  -e, --local-echo            Do local echo\n");
-    printf("  -t, --timestamp             Prefix each new line with a timestamp\n");
     printf("  -l, --log <filename>        Log to file\n");
-    printf("  -m, --map <flags>           Map special characters\n");
     printf("  -v, --version               Display version\n");
     printf("  -h, --help                  Display help\n");
-    printf("\n");
-    printf("See the man page for list of supported mapping flags.\n");
     printf("\n");
     printf("In session, press ctrl-t q to quit.\n");
     printf("\n");
@@ -106,6 +100,7 @@ void parse_options(int argc, char *argv[])
     {
         static struct option long_options[] =
         {
+	    {"endline",        required_argument, 0, 'e'},
             {"baudrate",       required_argument, 0, 'b'},
             {"databits",       required_argument, 0, 'd'},
             {"flow",           required_argument, 0, 'f'},
@@ -113,10 +108,7 @@ void parse_options(int argc, char *argv[])
             {"parity",         required_argument, 0, 'p'},
             {"output-delay",   required_argument, 0, 'o'},
             {"no-autoconnect", no_argument,       0, 'n'},
-            {"local-echo",     no_argument,       0, 'e'},
-            {"timestamp",      no_argument,       0, 't'},
             {"log",            required_argument, 0, 'l'},
-            {"map",            required_argument, 0, 'm'},
             {"version",        no_argument,       0, 'v'},
             {"help",           no_argument,       0, 'h'},
             {0,                0,                 0,  0 }
@@ -126,7 +118,7 @@ void parse_options(int argc, char *argv[])
         int option_index = 0;
 
         /* Parse argument using getopt_long */
-        c = getopt_long(argc, argv, "b:d:f:s:p:o:netl:m:vh", long_options, &option_index);
+        c = getopt_long(argc, argv, "e:b:d:f:s:p:o:nl:vh", long_options, &option_index);
 
         /* Detect the end of the options */
         if (c == -1)
@@ -142,6 +134,10 @@ void parse_options(int argc, char *argv[])
                 if (optarg)
                     printf(" with arg %s", optarg);
                 printf("\n");
+                break;
+
+            case 'e':
+                option.endline = optarg;
                 break;
 
             case 'b':
@@ -172,26 +168,15 @@ void parse_options(int argc, char *argv[])
                 option.no_autoconnect = true;
                 break;
 
-            case 'e':
-                option.local_echo = true;
-                break;
-
-            case 't':
-                option.timestamp = true;
-                break;
-
             case 'l':
                 option.log = true;
                 option.log_filename = optarg;
                 break;
 
-            case 'm':
-                option.map = optarg;
-                break;
-
             case 'v':
                 printf("tio v%s\n", VERSION);
-                printf("Copyright (c) 2014-2018 Martin Lund\n");
+                printf("Copyright (c) 2014-2016 Martin Lund\n");
+                printf("Revised by Marcin Filipiak NoweEnergie.org\n");
                 printf("\n");
                 printf("License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl-2.0.html>.\n");
                 printf("This is free software: you are free to change and redistribute it.\n");

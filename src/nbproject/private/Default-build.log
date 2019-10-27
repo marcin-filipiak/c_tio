@@ -1,0 +1,7 @@
+  CC       tty.o
+  CC       options.o
+  CC       time.o
+  CC       main.o
+  CC       log.o
+  CC       error.o
+  CCLD     tio

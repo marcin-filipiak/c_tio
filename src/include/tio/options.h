@@ -1,7 +1,7 @@
 /*
  * tio - a simple TTY terminal I/O application
  *
- * Copyright (c) 2014-2017  Martin Lund
+ * Copyright (c) 2014-2016  Martin Lund
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 /* Options */
 struct option_t
 {
+    char *endline;
     const char *tty_device;
     unsigned int baudrate;
     int databits;
@@ -39,10 +40,7 @@ struct option_t
     int output_delay;
     bool no_autoconnect;
     bool log;
-    bool local_echo;
-    bool timestamp;
     const char *log_filename;
-    const char *map;
 };
 
 extern struct option_t option;
